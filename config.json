@@ -1,0 +1,37 @@
+{
+    "server": {
+        "host": "0.0.0.0",
+        "port": 8000,
+        "debug": false,
+        "reload": false
+    },
+    "serial": {
+        "default_baudrate": 9600,
+        "usb_baudrate": 115200,
+        "timeout": 2.0,
+        "auto_scan": true
+    },
+    "frequency": {
+        "default_frequency": 1000.0,
+        "min_frequency": 1.0,
+        "max_frequency": 8000.0,
+        "excel_file": "frequency_loss1.xlsx"
+    },
+    "attenuation": {
+        "min_value": 0.0,
+        "max_value": 90.0,
+        "step": 0.25,
+        "default_value": 0.0
+    },
+    "logging": {
+        "level": "INFO",
+        "max_log_entries": 100,
+        "log_file": "attenuator_control.log"
+    },
+    "system": {
+        "auto_connect": false,
+        "status_refresh_interval": 30,
+        "max_retry_attempts": 3,
+        "retry_delay": 1.0
+    }
+}

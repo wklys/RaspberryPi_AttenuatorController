@@ -1,0 +1,25 @@
+# 树莓派衰减器控制系统依赖包
+
+# Web框架
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# 模板引擎
+jinja2==3.1.2
+
+# 串口通信
+pyserial==3.5
+
+# 数据处理
+pandas==2.1.3
+numpy==1.24.3
+openpyxl==3.1.2
+
+# 数据验证
+pydantic==2.5.0
+
+# 日志
+python-multipart==0.0.6
+
+# 系统工具
+psutil==5.9.6
