@@ -1,0 +1,17 @@
+2025-09-19 10:20:00,292 - numexpr.utils - INFO - Note: NumExpr detected 16 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2025-09-19 10:20:00,292 - numexpr.utils - INFO - NumExpr defaulting to 8 threads.
+2025-09-19 10:20:00,563 - __main__ - INFO - ==================================================
+2025-09-19 10:20:00,564 - __main__ - INFO - 树莓派衰减器控制系统启动
+2025-09-19 10:20:00,564 - __main__ - INFO - ==================================================
+2025-09-19 10:20:00,564 - __main__ - INFO - 服务器地址: 0.0.0.0:8000
+2025-09-19 10:20:00,564 - __main__ - INFO - 调试模式: False
+2025-09-19 10:20:00,564 - __main__ - INFO - 自动重载: False
+2025-09-19 10:20:00,564 - __main__ - INFO - 工作目录: D:\Project\Python\AttenuatorController\AttCtrl
+2025-09-19 10:20:00,592 - serial_attenuator - INFO - 加载设备序列号映射配置: 12 个设备
+2025-09-19 10:20:00,641 - __main__ - INFO - 正在启动Web服务器...
+2025-09-19 10:20:00,658 - web_server - INFO - 树莓派衰减器控制系统启动
+2025-09-19 10:20:00,664 - serial_attenuator - INFO - 发现 0 个ACM串口设备: []
+2025-09-19 10:20:00,664 - web_server - INFO - 启动时发现 0 个串口设备
+2025-09-19 10:20:15,376 - web_server - INFO - 正在关闭系统...
+2025-09-19 10:20:15,377 - web_server - INFO - 已断开所有设备连接
+2025-09-19 10:20:15,378 - __main__ - INFO - 服务器已关闭

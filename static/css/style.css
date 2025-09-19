@@ -278,6 +278,50 @@ body {
     color: var(--primary-color);
 }
 
+/* 单设备控制样式 */
+#single-device-status {
+    border-left: 4px solid #007bff;
+    background-color: #f8f9fa;
+    margin-bottom: 0;
+}
+
+#single-device-status.success {
+    border-left-color: #28a745;
+    background-color: #d4edda;
+}
+
+#single-device-status.error {
+    border-left-color: #dc3545;
+    background-color: #f8d7da;
+}
+
+#device-select {
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+#device-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+#single-attenuation-input {
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+#single-attenuation-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.single-device-controls .btn {
+    transition: all 0.15s ease-in-out;
+}
+
+.single-device-controls .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
     .container-fluid {
@@ -303,6 +347,16 @@ body {
     .device-table th,
     .device-table td {
         padding: 8px;
+    }
+    
+    /* 单设备控制在小屏幕上的样式 */
+    .single-device-controls .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .single-device-controls .btn:last-child {
+        margin-bottom: 0;
     }
 }
 

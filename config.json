@@ -14,8 +14,7 @@
     "frequency": {
         "default_frequency": 1000.0,
         "min_frequency": 1.0,
-        "max_frequency": 8000.0,
-        "excel_file": "frequency_loss1.xlsx"
+        "max_frequency": 8000.0
     },
     "attenuation": {
         "min_value": 0.0,

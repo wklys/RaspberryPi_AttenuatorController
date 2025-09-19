@@ -119,11 +119,6 @@ def main():
     logger.info(f"自动重载: {reload}")
     logger.info(f"工作目录: {current_dir}")
     
-    # 检查频率补偿文件
-    freq_file = current_dir / config.get("frequency", {}).get("excel_file", "frequency_loss1.xlsx")
-    if not freq_file.exists():
-        logger.warning(f"频率补偿文件 {freq_file} 不存在，将使用默认补偿数据")
-    
     try:
         # 导入并启动Web服务器
         import uvicorn

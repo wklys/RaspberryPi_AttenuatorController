@@ -47,6 +47,18 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(async () => {
         await updateMinAttenuation();
     }, 1000); // 延迟1秒确保系统状态加载完成
+    
+    // 初始化单设备控制功能
+    loadDeviceList();
+    
+    // 绑定单设备控制事件
+    const deviceSelect = document.getElementById('device-select');
+    const setSingleBtn = document.getElementById('set-single-attenuation-btn');
+    const getSingleBtn = document.getElementById('get-single-attenuation-btn');
+    
+    if (deviceSelect) deviceSelect.addEventListener('change', onDeviceSelectionChange);
+    if (setSingleBtn) setSingleBtn.addEventListener('click', setSingleAttenuation);
+    if (getSingleBtn) getSingleBtn.addEventListener('click', getSingleAttenuation);
 });
 
 // 初始化事件监听器
@@ -188,6 +200,7 @@ async function connectDevices() {
         if (response.success) {
             addLog(response.message, 'success');
             await loadDeviceStatus();
+            await loadDeviceList(); // 刷新单设备控制区域的设备列表
             updateSystemStatus('connected');
         } else {
             addLog('连接失败: ' + response.message, 'error');
@@ -212,6 +225,7 @@ async function disconnectDevices() {
             connectedDevices = [];
             updateDevicesDisplay();
             updateDeviceStatusTable();
+            await loadDeviceList(); // 清空单设备控制区域的设备列表
             updateSystemStatus('disconnected');
         } else {
             addLog('断开连接失败: ' + response.message, 'error');
@@ -631,11 +645,125 @@ function showMessage(title, message, type = 'info') {
     elements.messageModal.show();
 }
 
+// 单设备控制相关函数
+async function loadDeviceList() {
+    try {
+        const response = await fetch('/api/devices/ids');
+        const data = await response.json();
+        
+        const deviceSelect = document.getElementById('device-select');
+        deviceSelect.innerHTML = '<option value="">请选择设备</option>';
+        
+        if (data.data && data.data.device_ids && data.data.device_ids.length > 0) {
+            data.data.device_ids.forEach(deviceId => {
+                const option = document.createElement('option');
+                option.value = deviceId;
+                option.textContent = `设备 ${deviceId}`;
+                deviceSelect.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('获取设备列表失败:', error);
+        showMessage('错误', '获取设备列表失败', 'error');
+    }
+}
+
+async function setSingleAttenuation() {
+    const deviceSelect = document.getElementById('device-select');
+    const attenuationInput = document.getElementById('single-attenuation-input');
+    
+    const deviceId = deviceSelect.value;
+    const attenuation = parseFloat(attenuationInput.value);
+    
+    if (!deviceId) {
+        showMessage('提示', '请先选择设备', 'warning');
+        return;
+    }
+    
+    if (isNaN(attenuation) || attenuation < 0 || attenuation > 90) {
+        showMessage('输入错误', '请输入有效的衰减值 (0-90 dB)', 'error');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/attenuators/set', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                device_id: deviceId,
+                value: attenuation
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            showMessage('成功', `设备 ${deviceId} 衰减值已设置为 ${attenuation} dB`, 'success');
+            updateSingleDeviceInfo(deviceId, attenuation);
+        } else {
+            showMessage('错误', data.detail || '设置失败', 'error');
+        }
+    } catch (error) {
+        console.error('设置单设备衰减值失败:', error);
+        showMessage('错误', '设置单设备衰减值失败', 'error');
+    }
+}
+
+async function getSingleAttenuation() {
+    const deviceSelect = document.getElementById('device-select');
+    const deviceId = deviceSelect.value;
+    
+    if (!deviceId) {
+        showMessage('提示', '请先选择设备', 'warning');
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/api/attenuators/${deviceId}`);
+        const data = await response.json();
+        
+        if (response.ok) {
+            const attenuationInput = document.getElementById('single-attenuation-input');
+            attenuationInput.value = data.data.current_attenuation;
+            updateSingleDeviceInfo(deviceId, data.data.current_attenuation);
+            showMessage('成功', `设备 ${deviceId} 当前衰减值: ${data.data.current_attenuation} dB`, 'success');
+        } else {
+            showMessage('错误', data.detail || '读取失败', 'error');
+        }
+    } catch (error) {
+        console.error('读取单设备衰减值失败:', error);
+        showMessage('错误', '读取单设备衰减值失败', 'error');
+    }
+}
+
+function updateSingleDeviceInfo(deviceId, attenuation) {
+    const deviceInfo = document.getElementById('single-device-info');
+    deviceInfo.textContent = `设备 ${deviceId} - 当前衰减值: ${attenuation} dB`;
+}
+
+// 设备选择变化时的处理
+function onDeviceSelectionChange() {
+    const deviceSelect = document.getElementById('device-select');
+    const deviceId = deviceSelect.value;
+    
+    if (deviceId) {
+        // 自动读取选中设备的当前衰减值
+        getSingleAttenuation();
+    } else {
+        const deviceInfo = document.getElementById('single-device-info');
+        deviceInfo.textContent = '请先选择设备';
+        document.getElementById('single-attenuation-input').value = '0';
+    }
+}
+
 // 定期刷新状态
 setInterval(async () => {
     if (systemStatus === 'connected') {
         try {
             await loadDeviceStatus();
+            await loadDeviceList(); // 定时更新设备列表
         } catch (error) {
             console.error('定期刷新状态失败:', error);
         }
@@ -646,5 +774,6 @@ setInterval(async () => {
 document.addEventListener('visibilitychange', () => {
     if (!document.hidden && systemStatus === 'connected') {
         loadDeviceStatus();
+        loadDeviceList();
     }
 });

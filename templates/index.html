@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WCS多路衰减器控制系统</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-icons.css" rel="stylesheet">
     <link href="/static/css/style.css" rel="stylesheet">
 </head>
 <body>
@@ -189,6 +189,56 @@
                     </div>
                 </div>
 
+                <!-- 单设备控制 -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="bi bi-gear"></i>
+                            单设备控制
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="device-select" class="form-label">选择设备:</label>
+                                    <select id="device-select" class="form-select">
+                                        <option value="">请选择设备</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="single-attenuation-input" class="form-label">衰减值 (dB):</label>
+                                    <div class="input-group">
+                                        <input type="number" id="single-attenuation-input" class="form-control"
+                                               min="0" max="90" step="0.25" value="0">
+                                        <span class="input-group-text">dB</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3 single-device-controls">
+                            <button id="set-single-attenuation-btn" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i>
+                                设置单设备衰减值
+                            </button>
+                            <button id="get-single-attenuation-btn" class="btn btn-outline-secondary ms-2">
+                                <i class="bi bi-arrow-clockwise"></i>
+                                读取单设备值
+                            </button>
+                        </div>
+                        
+                        <div id="single-device-status" class="alert alert-light">
+                            <small>
+                                <strong>设备状态:</strong>
+                                <span id="single-device-info">请先选择设备</span>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 设备状态 -->
                 <div class="card mb-4">
                     <div class="card-header">
@@ -260,7 +310,7 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/app.js"></script>
 </body>
 </html>
