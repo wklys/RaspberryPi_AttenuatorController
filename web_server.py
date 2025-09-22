@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-树莓派衰减器控制Web服务器
+WCS衰减器控制Web服务器
 使用FastAPI提供RESTful API和Web界面
 """
 
@@ -42,7 +42,7 @@ json_file = config.get("frequency", {}).get("json_file", "1.json")
 
 # 创建FastAPI应用
 app = FastAPI(
-    title="树莓派衰减器控制系统",
+    title="WCS衰减器控制系统",
     description="通过Web界面控制多个串口衰减器设备",
     version="1.0.0"
 )
@@ -480,7 +480,7 @@ async def get_system_status():
 @app.on_event("startup")
 async def startup_event():
     """应用启动事件"""
-    logger.info("树莓派衰减器控制系统启动")
+    logger.info("WCS衰减器控制系统启动")
 
     # 自动扫描串口
     try:

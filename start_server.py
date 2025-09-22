@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-树莓派衰减器控制系统启动脚本
+WCS衰减器控制系统启动脚本
 """
 
 import os
@@ -75,7 +75,7 @@ def check_dependencies():
 
 def main():
     """主函数"""
-    parser = argparse.ArgumentParser(description="树莓派衰减器控制系统")
+    parser = argparse.ArgumentParser(description="WCS衰减器控制系统")
     parser.add_argument("--host", help="服务器地址")
     parser.add_argument("--port", type=int, help="服务器端口")
     parser.add_argument("--reload", action="store_true", help="开发模式自动重载")
@@ -112,7 +112,7 @@ def main():
     debug = args.debug or server_config.get("debug", False)
     
     logger.info("=" * 50)
-    logger.info("树莓派衰减器控制系统启动")
+    logger.info("WCS衰减器控制系统启动")
     logger.info("=" * 50)
     logger.info(f"服务器地址: {host}:{port}")
     logger.info(f"调试模式: {debug}")
