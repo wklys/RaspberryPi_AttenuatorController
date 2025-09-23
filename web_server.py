@@ -44,7 +44,7 @@ json_file = config.get("frequency", {}).get("json_file", "1.json")
 app = FastAPI(
     title="WCS衰减器控制系统",
     description="通过Web界面控制多个串口衰减器设备",
-    version="1.0.0"
+    version="1.1.1"
 )
 
 # 挂载静态文件 - 使用绝对路径
@@ -505,10 +505,14 @@ async def shutdown_event():
 # 异常处理
 @app.exception_handler(404)
 async def not_found_handler(request: Request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"success": False, "message": "接口不存在"}
-    )
+    # 只对API路径返回JSON错误，静态文件路径返回默认404
+    if request.url.path.startswith("/api/"):
+        return JSONResponse(
+            status_code=404,
+            content={"success": False, "message": "接口不存在"}
+        )
+    # 对于静态文件等其他路径，让FastAPI使用默认处理
+    raise exc
 
 
 @app.exception_handler(500)

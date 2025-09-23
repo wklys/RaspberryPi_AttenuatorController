@@ -415,7 +415,9 @@ class MultiAttenuatorController:
     def _load_serial_mapping(self):
         """加载设备序列号到补偿文件的映射配置"""
         try:
-            mapping_file = "device_serial_mapping.json"
+            # 使用绝对路径，确保在任何工作目录下都能找到配置文件
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            mapping_file = os.path.join(script_dir, "device_serial_mapping.json")
             if os.path.exists(mapping_file):
                 with open(mapping_file, 'r', encoding='utf-8') as f:
                     config = json.load(f)
@@ -514,11 +516,17 @@ class MultiAttenuatorController:
             compensation_file = self.serial_to_compensation[device_serial]
             logger.info(f"使用序列号映射: {device_serial} -> {compensation_file}")
             
-            # 检查文件是否存在
-            if os.path.exists(compensation_file):
+            # 检查文件是否存在 - 构建完整路径
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            if not os.path.dirname(compensation_file):  # 如果是相对文件名
+                full_path = os.path.join(script_dir, "compensation_files", compensation_file)
+            else:  # 如果已经是完整路径
+                full_path = compensation_file
+            
+            if os.path.exists(full_path):
                 return compensation_file
             else:
-                logger.warning(f"序列号映射的补偿文件 {compensation_file} 不存在，回退到端口映射")
+                logger.warning(f"序列号映射的补偿文件 {full_path} 不存在，回退到端口映射")
         
         # 回退到原有的端口映射逻辑
         return self._get_compensation_file_for_port(port)
@@ -534,7 +542,8 @@ class MultiAttenuatorController:
             port_num = int(acm_match.group(1))
             # acm0->1.json, acm1->2.json, acm2->3.json, acm3->4.json
             compensation_file = f"{port_num + 1}.json"
-            compensation_file_path = os.path.join("compensation_files", compensation_file)
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            compensation_file_path = os.path.join(script_dir, "compensation_files", compensation_file)
             
             # 检查文件是否存在
             if os.path.exists(compensation_file_path):
@@ -548,7 +557,8 @@ class MultiAttenuatorController:
         if com_match:
             port_num = int(com_match.group(1))
             compensation_file = f"{port_num}.json"
-            compensation_file_path = os.path.join("compensation_files", compensation_file)
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            compensation_file_path = os.path.join(script_dir, "compensation_files", compensation_file)
             
             if os.path.exists(compensation_file_path):
                 return compensation_file
@@ -845,8 +855,9 @@ class MultiAttenuatorController:
         try:
             self.serial_to_compensation[serial_number] = compensation_file
             
-            # 保存到配置文件
-            mapping_file = "device_serial_mapping.json"
+            # 保存到配置文件 - 使用绝对路径
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            mapping_file = os.path.join(script_dir, "device_serial_mapping.json")
             config = {
                 "serial_to_compensation_mapping": self.serial_to_compensation,
                 "description": "设备序列号到补偿文件的映射配置",

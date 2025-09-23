@@ -768,7 +768,7 @@ setInterval(async () => {
             console.error('定期刷新状态失败:', error);
         }
     }
-}, 30000); // 每30秒刷新一次
+}, 120000); // 每2分钟刷新一次
 
 // 页面可见性变化时刷新状态
 document.addEventListener('visibilitychange', () => {
